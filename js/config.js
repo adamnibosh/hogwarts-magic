@@ -79,13 +79,12 @@ const CONFIG = {
     article: "In a development that surprised absolutely no one who has ever met her, [Her Name] has once again proven that the most powerful magic in the wizarding world is not a spell, a potion, or a wand — it is being unapologetically, radiantly yourself. Witnesses report that her laugh can dispel Dementors within a fifty-meter radius. One source close to the matter, who wished to remain anonymous but definitely isn't [Your Name], stated: \"I've read seven books about magic. None of them prepared me for her.\"",
   },
 
-  // Put your 3 photos in the folder: hogwarts-magic/images/
-  // Name them photo1.jpg, photo2.jpg, photo3.jpg (or .png)
-  // Then the paths below will work automatically.
+  // Put photos in: hogwarts-magic/images/
+  // photo1.jpg, photo2.HEIC (or .jpg), photo3.jpg
   photos: [
     { src: "images/photo1.jpg", caption: "Us — a moment worth framing forever", secret: "I look at this more than I'd admit." },
     { src: "images/photo2.jpg", caption: "The smile that started everything", secret: "This is when I knew I was in trouble." },
-    { src: "images/photo3.jpg", caption: "My favorite chapter so far", secret: "And I'm greedy for the next one." },
+    { src: "images/photo3.jpg", caption: "My favorite chapter so far", secret: "My first couple date is with you sayang" },
   ],
 
   // Chocolate Frog cards — flip to reveal
