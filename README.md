@@ -1,40 +1,34 @@
-# Hogwarts Magic ✨
+# Chapter Eight ✨
 
-An interactive, romantic Harry Potter-themed website — built to make someone feel truly magical.
+Not a Harry Potter fan site. A love story written as the 8th book — with her as the protagonist.
 
-## Live Site
+**Live:** https://adamnibosh.github.io/hogwarts-magic/
 
-Visit the GitHub Pages URL after deployment (see below).
+## The experience
 
-## Features
+1. **Opening** — *"Some stories end at Chapter Seven..."* (cinematic text reveal)
+2. **The Book** — 5 chapters of your story, written on parchment pages she turns
+3. **Daily Prophet** — newspaper headlines about her
+4. **Living Photos** — wizard-style moving picture frames (add your real photos!)
+5. **Wand Magic** — she draws a heart to unlock your secret message
+6. **Hogwarts Express Ticket** — a real date invitation
+7. **"Always."** — stars form a heart in the sky
 
-- **Hogwarts Acceptance Letter** — animated envelope with wax seal
-- **Sorting Hat Quiz** — discover your Hogwarts house
-- **Marauder's Map** — speak the secret phrase to reveal a map of the heart
-- **Patronus Chamber** — cast Expecto Patronum with canvas animation
-- **Pensieve Memories** — touch memory orbs to relive special moments
-- **"Always" Finale** — Snape's iconic line, plus a Golden Snitch to catch
+## Personalize (this is what makes her cry)
 
-## Personalize It
+Edit `js/config.js`:
 
-Edit `js/config.js` before sharing:
+- `herName` / `yourName`
+- `chapters[]` — rewrite with YOUR real memories
+- `prophet` — funny personal headlines
+- `photos[]` — add image URLs of you two
+- `secretMessage` — the words you can't say out loud
+- `ticket` — plan a real date (dinner, HP movie marathon, etc.)
 
-```js
-const CONFIG = {
-  herName: "Her Name Here",
-  yourName: "Your Name Here",
-  defaultHouse: null, // or "gryffindor", "hufflepuff", "ravenclaw", "slytherin"
-};
-```
-
-You can also customize memory orb text and map messages in `index.html`.
-
-## Local Preview
-
-Open `index.html` in a browser, or run a simple server:
+## Local preview
 
 ```bash
 npx serve .
 ```
 
-## Made with magic ♥
+Then open http://localhost:3000

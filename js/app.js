@@ -1,399 +1,374 @@
 (function () {
   'use strict';
 
-  // Personalize names from config
+  const houses = {
+    gryffindor: { name: 'Gryffindor', emoji: '🦁' },
+    hufflepuff: { name: 'Hufflepuff', emoji: '🦡' },
+    ravenclaw: { name: 'Ravenclaw', emoji: '🦅' },
+    slytherin: { name: 'Slytherin', emoji: '🐍' },
+  };
+
+  // Apply names everywhere
   document.querySelectorAll('.her-name').forEach(el => el.textContent = CONFIG.herName);
   document.querySelectorAll('.sender-name').forEach(el => el.textContent = CONFIG.yourName);
 
-  // --- Candles ---
-  const candlesEl = document.getElementById('candles');
-  for (let i = 0; i < 18; i++) {
-    const c = document.createElement('div');
-    c.className = 'candle';
-    c.style.left = Math.random() * 100 + '%';
-    c.style.animationDuration = (8 + Math.random() * 12) + 's';
-    c.style.animationDelay = Math.random() * 10 + 's';
-    candlesEl.appendChild(c);
+  // Replace placeholders in text
+  function personalize(text) {
+    return text
+      .replace(/\[Her Name\]/g, CONFIG.herName)
+      .replace(/\[Your Name\]/g, CONFIG.yourName);
   }
 
-  // --- Wand trail ---
-  const trail = document.getElementById('wand-trail');
-  let lastTrail = 0;
-  document.addEventListener('mousemove', (e) => {
-    const now = Date.now();
-    if (now - lastTrail < 40) return;
-    lastTrail = now;
-    const p = document.createElement('div');
-    p.className = 'wand-particle';
-    p.style.left = e.clientX + 'px';
-    p.style.top = e.clientY + 'px';
-    trail.appendChild(p);
-    setTimeout(() => p.remove(), 800);
-  });
+  // --- Act switching ---
+  const acts = document.querySelectorAll('.act');
+  let currentAct = 0;
 
-  // --- Sparkles on click ---
-  document.addEventListener('click', (e) => {
-    for (let i = 0; i < 5; i++) {
-      const s = document.createElement('div');
-      s.className = 'sparkle';
-      s.style.left = (e.clientX + (Math.random() - 0.5) * 30) + 'px';
-      s.style.top = (e.clientY + (Math.random() - 0.5) * 30) + 'px';
-      document.getElementById('sparkles').appendChild(s);
-      setTimeout(() => s.remove(), 1500);
-    }
-  });
-
-  // --- Intro: Letter ---
-  const envelope = document.getElementById('envelope');
-  const enterBtn = document.getElementById('enter-btn');
-  const tapHint = document.getElementById('tap-hint');
-  let letterOpen = false;
-
-  function openLetter() {
-    if (letterOpen) return;
-    letterOpen = true;
-    envelope.classList.add('open');
-    tapHint.textContent = 'Your invitation awaits...';
-    setTimeout(() => {
-      enterBtn.classList.remove('hidden');
-      tapHint.classList.add('hidden');
-    }, 1500);
-  }
-
-  envelope.addEventListener('click', openLetter);
-  envelope.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); }
-  });
-
-  enterBtn.addEventListener('click', () => {
-    document.getElementById('intro').classList.remove('active');
-    document.getElementById('intro').style.display = 'none';
-    document.getElementById('castle').classList.remove('hidden');
+  function showAct(id) {
+    acts.forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
-  });
-
-  // --- Navigation ---
-  const navBtns = document.querySelectorAll('.nav-btn');
-  const panels = document.querySelectorAll('.panel');
-
-  navBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const section = btn.dataset.section;
-      navBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      panels.forEach(p => p.classList.remove('active'));
-      document.getElementById(section).classList.add('active');
-      if (section === 'patronus') initPatronusCanvas();
-    });
-  });
-
-  // --- Sorting Hat Quiz ---
-  const questions = [
-    {
-      text: "A troll blocks your path in the dungeon corridor. You...",
-      answers: [
-        { text: "Charge forward — someone's in danger!", house: 'gryffindor' },
-        { text: "Look for a clever way around it", house: 'ravenclaw' },
-        { text: "Stay and help anyone who might be trapped", house: 'hufflepuff' },
-        { text: "Find out who let it loose and why", house: 'slytherin' },
-      ],
-    },
-    {
-      text: "You find a mysterious book in the library. You...",
-      answers: [
-        { text: "Read every page immediately", house: 'ravenclaw' },
-        { text: "Share it with your closest friends", house: 'hufflepuff' },
-        { text: "Test if any spells actually work", house: 'gryffindor' },
-        { text: "Keep it secret — knowledge is power", house: 'slytherin' },
-      ],
-    },
-    {
-      text: "Your friend is upset after a bad day. You...",
-      answers: [
-        { text: "Sit with them until they feel better", house: 'hufflepuff' },
-        { text: "Make them laugh — humor heals everything", house: 'gryffindor' },
-        { text: "Help them figure out what went wrong", house: 'ravenclaw' },
-        { text: "Take care of whatever caused the problem", house: 'slytherin' },
-      ],
-    },
-    {
-      text: "Which magical object would you choose?",
-      answers: [
-        { text: "The Invisibility Cloak", house: 'gryffindor' },
-        { text: "The Time-Turner", house: 'ravenclaw' },
-        { text: "A Portkey to your loved ones", house: 'hufflepuff' },
-        { text: "The Elder Wand", house: 'slytherin' },
-      ],
-    },
-    {
-      text: "What matters most to you?",
-      answers: [
-        { text: "Standing up for what's right", house: 'gryffindor' },
-        { text: "Understanding the world deeply", house: 'ravenclaw' },
-        { text: "Being there for the people you love", house: 'hufflepuff' },
-        { text: "Achieving greatness on your own terms", house: 'slytherin' },
-      ],
-    },
-  ];
-
-  const houseData = {
-    gryffindor: {
-      name: 'Gryffindor',
-      emoji: '🦁',
-      color: '#740001',
-      desc: 'Bold, passionate, and fiercely loyal — you charge into life with courage that inspires everyone around you.',
-      love: 'A Gryffindor heart loves bravely. And someone loves your brave heart very much.',
-    },
-    hufflepuff: {
-      name: 'Hufflepuff',
-      emoji: '🦡',
-      color: '#ecb939',
-      desc: 'Warm, devoted, and endlessly kind — you are the person everyone wants on their team, in their corner, in their life.',
-      love: 'Hufflepuffs love with quiet, unwavering devotion. You are deeply, steadily loved.',
-    },
-    ravenclaw: {
-      name: 'Ravenclaw',
-      emoji: '🦅',
-      color: '#0e1a40',
-      desc: 'Curious, witty, and wonderfully unique — your mind is a library of wonders, and your perspective lights up every room.',
-      love: 'A Ravenclaw love is thoughtful and true. Someone finds your mind absolutely enchanting.',
-    },
-    slytherin: {
-      name: 'Slytherin',
-      emoji: '🐍',
-      color: '#1a472a',
-      desc: 'Ambitious, resourceful, and magnetic — you know what you want and you make things happen. That\'s powerful.',
-      love: 'Slytherins love with intensity and intention. You are chosen — deliberately, completely.',
-    },
-  };
-
-  let currentQ = 0;
-  const scores = { gryffindor: 0, hufflepuff: 0, ravenclaw: 0, slytherin: 0 };
-
-  const qNumber = document.getElementById('q-number');
-  const qText = document.getElementById('q-text');
-  const answersEl = document.getElementById('answers');
-  const questionBox = document.getElementById('question-box');
-  const sortingResult = document.getElementById('sorting-result');
-
-  function showQuestion() {
-    questionBox.classList.remove('hidden');
-    sortingResult.classList.add('hidden');
-    const q = questions[currentQ];
-    qNumber.textContent = `Question ${currentQ + 1} of ${questions.length}`;
-    qText.textContent = q.text;
-    answersEl.innerHTML = '';
-    q.answers.forEach(a => {
-      const btn = document.createElement('button');
-      btn.className = 'answer-btn';
-      btn.textContent = a.text;
-      btn.addEventListener('click', () => {
-        scores[a.house]++;
-        currentQ++;
-        if (currentQ < questions.length) {
-          showQuestion();
-        } else {
-          showResult();
-        }
-      });
-      answersEl.appendChild(btn);
-    });
+    if (id === 'act-always') startConstellation();
   }
 
-  function showResult() {
-    questionBox.classList.add('hidden');
-    sortingResult.classList.remove('hidden');
+  // --- Opening sequence ---
+  const lines = document.querySelectorAll('#opening-lines .line');
+  const btnBegin = document.getElementById('btn-begin');
 
-    let winner = CONFIG.defaultHouse || 'gryffindor';
-    let max = 0;
-    for (const [house, score] of Object.entries(scores)) {
-      if (score > max) { max = score; winner = house; }
-    }
-
-    const data = houseData[winner];
-    const banner = document.getElementById('result-banner');
-    banner.textContent = data.emoji;
-    banner.style.background = `radial-gradient(circle, ${data.color}88, ${data.color}33)`;
-    banner.style.border = `3px solid ${data.color}`;
-    document.getElementById('result-house').textContent = data.name + '!';
-    document.getElementById('result-desc').textContent = data.desc;
-    document.getElementById('result-love').textContent = data.love;
-  }
-
-  document.getElementById('retry-quiz').addEventListener('click', () => {
-    currentQ = 0;
-    Object.keys(scores).forEach(k => scores[k] = 0);
-    showQuestion();
+  lines.forEach(line => {
+    const delay = parseInt(line.dataset.delay, 10);
+    setTimeout(() => line.classList.remove('hidden'), delay);
   });
 
-  showQuestion();
+  setTimeout(() => btnBegin.classList.remove('hidden'), 12000);
 
-  // --- Marauder's Map ---
-  const mapPhrase = document.getElementById('map-phrase');
-  const mapReveal = document.getElementById('map-reveal');
-  const mapParchment = document.getElementById('map-parchment');
-  const mapMessage = document.getElementById('map-message');
-  const mapClose = document.getElementById('map-close');
+  btnBegin.addEventListener('click', () => showAct('act-book'));
 
-  const correctPhrase = 'i solemnly swear that i am up to no good';
+  // --- Book chapters ---
+  let chapterIndex = 0;
+  const bookPage = document.getElementById('book-page');
+  const pageChapter = document.getElementById('page-chapter');
+  const pageTitle = document.getElementById('page-title');
+  const pageBody = document.getElementById('page-body');
+  const chapterIndicator = document.getElementById('chapter-indicator');
+  const progressFill = document.getElementById('progress-fill');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
 
-  function revealMap() {
-    const val = mapPhrase.value.trim().toLowerCase();
-    if (val === correctPhrase || val.includes('solemnly swear')) {
-      mapParchment.classList.remove('hidden');
-      mapClose.classList.remove('hidden');
-      mapReveal.textContent = 'Revealed!';
+  function renderChapter(idx) {
+    const ch = CONFIG.chapters[idx];
+    bookPage.classList.add('turning');
+    setTimeout(() => {
+      pageChapter.textContent = ch.title;
+      pageTitle.textContent = ch.subtitle;
+      pageBody.innerHTML = ch.body.map(p => `<p>${personalize(p)}</p>`).join('');
+      chapterIndicator.textContent = `Chapter ${idx + 1} of ${CONFIG.chapters.length}`;
+      progressFill.style.width = ((idx + 1) / CONFIG.chapters.length * 100) + '%';
+      btnPrev.disabled = idx === 0;
+      btnNext.textContent = idx === CONFIG.chapters.length - 1 ? 'Finish the book →' : 'Next →';
+      bookPage.classList.remove('turning');
+    }, 300);
+  }
+
+  function nextChapter() {
+    if (chapterIndex < CONFIG.chapters.length - 1) {
+      chapterIndex++;
+      renderChapter(chapterIndex);
     } else {
-      mapMessage.textContent = 'The map remains blank... try the classic phrase.';
-      mapMessage.style.color = '#740001';
-      mapParchment.classList.remove('hidden');
-      setTimeout(() => mapParchment.classList.add('hidden'), 2000);
+      showAct('act-prophet');
     }
   }
 
-  mapReveal.addEventListener('click', revealMap);
-  mapPhrase.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') revealMap();
+  function prevChapter() {
+    if (chapterIndex > 0) {
+      chapterIndex--;
+      renderChapter(chapterIndex);
+    }
+  }
+
+  btnNext.addEventListener('click', nextChapter);
+  btnPrev.addEventListener('click', prevChapter);
+  bookPage.addEventListener('click', (e) => {
+    if (e.target.closest('button')) return;
+    nextChapter();
   });
 
-  document.querySelectorAll('.map-point').forEach(point => {
-    point.addEventListener('click', () => {
-      mapMessage.textContent = point.dataset.msg;
-      mapMessage.style.color = '#2c1810';
-    });
-  });
+  renderChapter(0);
 
-  mapClose.addEventListener('click', () => {
-    mapParchment.classList.add('hidden');
-    mapClose.classList.add('hidden');
-    mapMessage.textContent = '';
-    mapPhrase.value = '';
-    mapReveal.textContent = 'Reveal';
-  });
+  // --- Daily Prophet ---
+  function buildProphet() {
+    document.getElementById('prophet-date').textContent = CONFIG.prophet.date;
+    const headlinesEl = document.getElementById('prophet-headlines');
+    headlinesEl.innerHTML = CONFIG.prophet.headlines.map(h => {
+      const cls = h.size === 'big' ? 'headline-big' : h.size === 'medium' ? 'headline-medium' : 'headline-small';
+      return `<p class="${cls}">${personalize(h.text)}</p>`;
+    }).join('');
+    document.getElementById('prophet-article').textContent = personalize(CONFIG.prophet.article);
+  }
 
-  // --- Patronus Canvas ---
-  let patronusAnim = null;
+  buildProphet();
+  document.getElementById('btn-after-prophet').addEventListener('click', () => showAct('act-photos'));
 
-  function initPatronusCanvas() {
-    const canvas = document.getElementById('patronus-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
+  // --- Living photos ---
+  function buildPhotos() {
+    const wall = document.getElementById('photo-wall');
+    const rotations = [-3, 2, -1];
+    wall.innerHTML = CONFIG.photos.map((photo, i) => {
+      const inner = photo.src
+        ? `<img src="${photo.src}" alt="${photo.caption}" loading="lazy">`
+        : `<div class="frame-placeholder">✦</div>`;
+      return `
+        <div class="living-frame" style="--rot: ${rotations[i % rotations.length]}deg">
+          <div class="frame-border">
+            <div class="frame-inner">${inner}</div>
+          </div>
+          <p class="frame-caption">${personalize(photo.caption)}</p>
+        </div>`;
+    }).join('');
+  }
+
+  buildPhotos();
+  document.getElementById('btn-after-photos').addEventListener('click', () => showAct('act-wand'));
+
+  // --- Wand heart drawing ---
+  const canvas = document.getElementById('wand-canvas');
+  const ctx = canvas.getContext('2d');
+  const wandStatus = document.getElementById('wand-status');
+  const secretReveal = document.getElementById('secret-reveal');
+  const btnAfterWand = document.getElementById('btn-after-wand');
+  let drawing = false;
+  let points = [];
+  let unlocked = false;
+
+  function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
+    redraw();
+  }
 
-    let particles = [];
-    let running = false;
+  function redraw() {
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    if (points.length < 2) return;
+    ctx.strokeStyle = '#740001';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = 'rgba(201, 162, 39, 0.5)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
 
-    document.getElementById('cast-patronus').onclick = () => {
-      if (running) return;
-      running = true;
-      document.getElementById('patronus-message').classList.remove('hidden');
-      particles = [];
-      for (let i = 0; i < 120; i++) {
-        particles.push({
-          x: rect.width / 2,
-          y: rect.height / 2,
-          angle: (Math.PI * 2 * i) / 120,
-          speed: 1 + Math.random() * 2,
-          life: 1,
-          size: 2 + Math.random() * 3,
-        });
-      }
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+  }
 
-      function draw() {
-        ctx.clearRect(0, 0, rect.width, rect.height);
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
+  function startDraw(e) {
+    if (unlocked) return;
+    e.preventDefault();
+    drawing = true;
+    points = [getPos(e)];
+    spawnParticles(getPos(e));
+  }
 
-        // Silvery mist
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 150);
-        grad.addColorStop(0, 'rgba(200, 220, 255, 0.15)');
-        grad.addColorStop(1, 'transparent');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, rect.width, rect.height);
+  function moveDraw(e) {
+    if (!drawing || unlocked) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    points.push(pos);
+    redraw();
+    if (Math.random() > 0.7) spawnParticles(pos);
+  }
 
-        // Stag-like patronus shape
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.globalAlpha = 0.6 + Math.sin(Date.now() / 500) * 0.2;
-        ctx.strokeStyle = 'rgba(200, 230, 255, 0.8)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        // Body
-        ctx.moveTo(-60, 20);
-        ctx.quadraticCurveTo(-30, -40, 0, -60);
-        ctx.quadraticCurveTo(30, -40, 60, 20);
-        ctx.quadraticCurveTo(40, 40, 0, 50);
-        ctx.quadraticCurveTo(-40, 40, -60, 20);
-        // Antlers
-        ctx.moveTo(0, -60);
-        ctx.lineTo(-20, -100);
-        ctx.moveTo(0, -60);
-        ctx.lineTo(20, -100);
-        ctx.moveTo(-20, -100);
-        ctx.lineTo(-35, -90);
-        ctx.moveTo(20, -100);
-        ctx.lineTo(35, -90);
-        ctx.stroke();
-        ctx.restore();
+  function endDraw() {
+    if (!drawing || unlocked) return;
+    drawing = false;
+    checkHeart();
+  }
 
-        let alive = 0;
-        particles.forEach(p => {
-          p.x += Math.cos(p.angle) * p.speed;
-          p.y += Math.sin(p.angle) * p.speed;
-          p.life -= 0.008;
-          if (p.life > 0) {
-            alive++;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(200, 230, 255, ${p.life * 0.8})`;
-            ctx.fill();
-          }
-        });
+  function checkHeart() {
+    if (points.length < 30) return;
+    const rect = canvas.getBoundingClientRect();
+    const xs = points.map(p => p.x);
+    const ys = points.map(p => p.y);
+    const width = Math.max(...xs) - Math.min(...xs);
+    const height = Math.max(...ys) - Math.min(...ys);
+    const ratio = width / height;
 
-        if (alive > 0) {
-          patronusAnim = requestAnimationFrame(draw);
-        } else {
-          running = false;
+    // Generous heart detection: enough points, reasonable aspect ratio, drawn in upper-mid area
+    const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+    const inZone = cy < rect.height * 0.75 && width > 60 && height > 50;
+
+    if (points.length > 50 && ratio > 0.6 && ratio < 1.8 && inZone) {
+      unlockSecret();
+    }
+  }
+
+  function unlockSecret() {
+    unlocked = true;
+    wandStatus.textContent = '✨ Your magic is real.';
+    document.getElementById('secret-text').textContent = personalize(CONFIG.secretMessage);
+    secretReveal.classList.remove('hidden');
+    btnAfterWand.classList.remove('hidden');
+    burstParticles();
+  }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', moveDraw, { passive: false });
+  canvas.addEventListener('touchend', endDraw);
+
+  document.getElementById('btn-clear-wand').addEventListener('click', () => {
+    if (unlocked) return;
+    points = [];
+    redraw();
+    wandStatus.textContent = 'Draw with your finger or mouse...';
+  });
+
+  btnAfterWand.addEventListener('click', () => showAct('act-ticket'));
+  resizeCanvas();
+  window.addEventListener('resize', () => {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    resizeCanvas();
+  });
+
+  // --- Ticket ---
+  function buildTicket() {
+    const house = houses[CONFIG.herHouse] || houses.gryffindor;
+    document.getElementById('ticket-name').textContent = CONFIG.herName;
+    document.getElementById('ticket-dest').textContent = CONFIG.ticket.destination;
+    document.getElementById('ticket-date').textContent = CONFIG.ticket.date;
+    document.getElementById('ticket-platform').textContent = CONFIG.ticket.platform;
+    document.getElementById('ticket-house').textContent = `${house.emoji} House: ${house.name}`;
+    document.getElementById('ticket-note').textContent = CONFIG.ticket.note;
+  }
+
+  buildTicket();
+  document.getElementById('btn-finale').addEventListener('click', () => showAct('act-always'));
+
+  // --- Constellation finale ---
+  let constellationAnim = null;
+
+  function startConstellation() {
+    const cvs = document.getElementById('constellation');
+    const c = cvs.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    cvs.width = window.innerWidth * dpr;
+    cvs.height = window.innerHeight * dpr;
+    c.scale(dpr, dpr);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    const heartStars = [];
+    for (let i = 0; i < 60; i++) {
+      const t = (i / 60) * Math.PI * 2;
+      const hx = 16 * Math.pow(Math.sin(t), 3);
+      const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+      heartStars.push({
+        tx: w/2 + hx * 8,
+        ty: h/2 + hy * 8 - 20,
+        x: Math.random() * w,
+        y: Math.random() * h,
+        speed: 0.02 + Math.random() * 0.03,
+      });
+    }
+
+    const bgStars = Array.from({ length: 80 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      a: Math.random(),
+    }));
+
+    let frame = 0;
+    function draw() {
+      c.clearRect(0, 0, w, h);
+      bgStars.forEach(s => {
+        c.beginPath();
+        c.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        c.fillStyle = `rgba(255,255,255,${s.a * 0.5 + Math.sin(frame * 0.02 + s.x) * 0.2})`;
+        c.fill();
+      });
+
+      const formed = [];
+      heartStars.forEach(s => {
+        s.x += (s.tx - s.x) * s.speed;
+        s.y += (s.ty - s.y) * s.speed;
+        if (Math.abs(s.x - s.tx) < 5) formed.push(s);
+        c.beginPath();
+        c.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        c.fillStyle = 'rgba(240, 215, 140, 0.9)';
+        c.fill();
+      });
+
+      if (formed.length > 40) {
+        c.strokeStyle = 'rgba(240, 215, 140, 0.15)';
+        c.lineWidth = 1;
+        for (let i = 0; i < heartStars.length - 1; i++) {
+          c.beginPath();
+          c.moveTo(heartStars[i].x, heartStars[i].y);
+          c.lineTo(heartStars[i+1].x, heartStars[i+1].y);
+          c.stroke();
         }
       }
 
-      if (patronusAnim) cancelAnimationFrame(patronusAnim);
-      draw();
-    };
+      frame++;
+      constellationAnim = requestAnimationFrame(draw);
+    }
+
+    if (constellationAnim) cancelAnimationFrame(constellationAnim);
+    draw();
   }
 
-  // --- Pensieve ---
-  document.querySelectorAll('.orb').forEach(orb => {
-    orb.addEventListener('click', () => {
-      const display = document.getElementById('memory-display');
-      const text = document.getElementById('memory-text');
-      text.textContent = orb.dataset.memory;
-      display.classList.remove('hidden');
-      display.style.animation = 'none';
-      display.offsetHeight;
-      display.style.animation = 'memory-swirl 0.8s ease';
-    });
+  document.getElementById('btn-replay').addEventListener('click', () => {
+    chapterIndex = 0;
+    unlocked = false;
+    points = [];
+    secretReveal.classList.add('hidden');
+    btnAfterWand.classList.add('hidden');
+    wandStatus.textContent = 'Draw with your finger or mouse...';
+    renderChapter(0);
+    showAct('act-opening');
+    btnBegin.classList.remove('hidden');
   });
 
-  // --- Golden Snitch ---
-  const snitch = document.getElementById('snitch');
-  const snitchReward = document.getElementById('snitch-reward');
-
-  function catchSnitch() {
-    snitch.classList.add('caught');
-    setTimeout(() => {
-      snitch.style.display = 'none';
-      snitchReward.classList.remove('hidden');
-    }, 500);
+  // --- Particles ---
+  function spawnParticles(pos) {
+    const rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
+    for (let i = 0; i < 3; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = (rect.left + pos.x + (Math.random() - 0.5) * 20) + 'px';
+      p.style.top = (rect.top + pos.y + (Math.random() - 0.5) * 20) + 'px';
+      document.getElementById('particles').appendChild(p);
+      setTimeout(() => p.remove(), 2000);
+    }
   }
 
-  snitch.addEventListener('click', catchSnitch);
-  snitch.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); catchSnitch(); }
-  });
+  function burstParticles() {
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = (Math.random() * window.innerWidth) + 'px';
+        p.style.top = (Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2) + 'px';
+        p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+        document.getElementById('particles').appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+      }, i * 50);
+    }
+  }
 
 })();

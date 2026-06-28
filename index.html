@@ -3,210 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Magical Invitation</title>
+  <title>Chapter Eight</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="stars"></div>
-  <div id="candles" aria-hidden="true"></div>
-  <div id="sparkles" aria-hidden="true"></div>
 
-  <!-- INTRO: HOGWARTS LETTER -->
-  <section id="intro" class="screen active">
-    <div class="intro-glow"></div>
-    <p class="intro-whisper">Something magical awaits you...</p>
-    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your Hogwarts letter">
-      <div class="envelope-back"></div>
-      <div class="letter" id="letter">
-        <div class="letter-content">
-          <p class="letter-header">HOGWARTS SCHOOL OF WITCHCRAFT AND WIZARDRY</p>
-          <p class="letter-dear">Dear <span class="her-name">My Favorite Witch</span>,</p>
-          <p>We are pleased to inform you that you have been invited to experience something extraordinary — a journey crafted with love, magic, and every spell in the book.</p>
-          <p>Someone who cares about you deeply has built this enchanted world. Not because you need convincing that you're special — you already know that — but because you deserve to feel it, over and over.</p>
-          <p class="letter-sign">Yours magically,<br><span class="sender-name">Your Wizard</span></p>
-        </div>
-      </div>
-      <div class="envelope-front"></div>
-      <div class="wax-seal" id="wax-seal">
-        <span>H</span>
-      </div>
+  <!-- ACT 1: THE OPENING -->
+  <section id="act-opening" class="act active">
+    <div class="void"></div>
+    <div class="opening-text" id="opening-lines">
+      <p class="line hidden" data-delay="0">Some stories end at Chapter Seven.</p>
+      <p class="line hidden" data-delay="2800">The Boy Who Lived. The Battle of Hogwarts. The train pulling away.</p>
+      <p class="line hidden" data-delay="5800">But the best stories?</p>
+      <p class="line hidden" data-delay="7800">They keep going.</p>
+      <p class="line line-hero hidden" data-delay="10000">This one is about <span class="her-name">you</span>.</p>
     </div>
-    <p class="tap-hint" id="tap-hint">Tap the seal to open your letter</p>
-    <button class="btn-magic hidden" id="enter-btn">Enter the Castle →</button>
+    <button class="btn-begin hidden" id="btn-begin">Open the Book →</button>
   </section>
 
-  <!-- MAIN EXPERIENCE -->
-  <main id="castle" class="hidden">
-    <nav class="nav-magic">
-      <button class="nav-btn active" data-section="welcome">Welcome</button>
-      <button class="nav-btn" data-section="sorting">Sorting Hat</button>
-      <button class="nav-btn" data-section="map">Marauder's Map</button>
-      <button class="nav-btn" data-section="patronus">Patronus</button>
-      <button class="nav-btn" data-section="pensieve">Pensieve</button>
-      <button class="nav-btn" data-section="finale">Always</button>
-    </nav>
+  <!-- ACT 2: THE BOOK -->
+  <section id="act-book" class="act">
+    <div class="book-progress">
+      <span id="chapter-indicator">Chapter 1 of 5</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
 
-    <!-- WELCOME -->
-    <section id="welcome" class="panel active">
-      <h1 class="title-glow">Welcome to Your Magical World</h1>
-      <p class="subtitle">Where every chapter of Harry Potter taught us that love is the most powerful magic — and you are proof of that.</p>
-      <div class="quote-scroll">
-        <blockquote>
-          "Happiness can be found even in the darkest of times, if one only remembers to turn on the light."
-          <cite>— Albus Dumbledore</cite>
-        </blockquote>
-        <p class="personal-note">But honestly? <strong>You</strong> are the light. Every time.</p>
+    <div class="book-stage">
+      <div class="book-page" id="book-page">
+        <p class="page-chapter" id="page-chapter"></p>
+        <h2 class="page-title" id="page-title"></h2>
+        <div class="page-body" id="page-body"></div>
+        <p class="page-turn-hint">tap to turn the page →</p>
       </div>
-      <div class="house-preview">
-        <div class="house-card gryffindor"><span>🦁</span><h3>Gryffindor</h3><p>Bravery</p></div>
-        <div class="house-card hufflepuff"><span>🦡</span><h3>Hufflepuff</h3><p>Loyalty</p></div>
-        <div class="house-card ravenclaw"><span>🦅</span><h3>Ravenclaw</h3><p>Wisdom</p></div>
-        <div class="house-card slytherin"><span>🐍</span><h3>Slytherin</h3><p>Ambition</p></div>
-      </div>
-      <p class="guide-text">Explore each chamber below — your Sorting Hat awaits.</p>
-    </section>
+    </div>
 
-    <!-- SORTING HAT -->
-    <section id="sorting" class="panel">
-      <div class="sorting-container">
-        <div class="hat-icon">🎩</div>
-        <h2>The Sorting Hat Speaks</h2>
-        <p class="hat-intro">Answer honestly — the Hat knows when you're lying. (It also knows you're amazing.)</p>
-        <div id="quiz-area">
-          <div id="question-box">
-            <p class="q-number" id="q-number">Question 1 of 5</p>
-            <p class="q-text" id="q-text"></p>
-            <div class="answers" id="answers"></div>
-          </div>
-          <div id="sorting-result" class="hidden">
-            <div class="result-banner" id="result-banner"></div>
-            <h3 id="result-house"></h3>
-            <p id="result-desc"></p>
-            <p id="result-love" class="love-twist"></p>
-            <button class="btn-magic" id="retry-quiz">Sort Again</button>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="book-nav">
+      <button class="btn-ghost" id="btn-prev" disabled>← Back</button>
+      <button class="btn-ghost" id="btn-next">Next →</button>
+    </div>
+  </section>
 
-    <!-- MARAUDER'S MAP -->
-    <section id="map" class="panel">
-      <h2>The Marauder's Map</h2>
-      <p class="map-instruction">Place your wand on the parchment and speak the words...</p>
-      <div class="map-phrase-box">
-        <input type="text" id="map-phrase" placeholder="I solemnly swear that I am up to no good" autocomplete="off">
-        <button class="btn-magic" id="map-reveal">Reveal</button>
-      </div>
-      <div id="map-parchment" class="map-parchment hidden">
-        <svg viewBox="0 0 800 500" class="map-svg" aria-label="Marauder's Map">
-          <rect width="800" height="500" fill="#f4e4bc" rx="8"/>
-          <text x="400" y="40" text-anchor="middle" class="map-title">HOGWARTS — MAP OF THE HEART</text>
-          <path class="footprint-path" d="M100,400 Q200,300 300,350 T500,200 T700,100" fill="none" stroke="#8b4513" stroke-width="2" stroke-dasharray="8,4"/>
-          <g class="map-point" data-msg="Where we first met — the beginning of our story">
-            <circle cx="100" cy="400" r="12" fill="#740001"/>
-            <text x="100" y="430" text-anchor="middle" font-size="11">First Meeting</text>
-          </g>
-          <g class="map-point" data-msg="Every laugh we've shared — louder than any Howler">
-            <circle cx="300" cy="350" r="12" fill="#0e1a40"/>
-            <text x="300" y="380" text-anchor="middle" font-size="11">Shared Laughter</text>
-          </g>
-          <g class="map-point" data-msg="Late-night talks that felt like sitting in the Room of Requirement">
-            <circle cx="500" cy="200" r="12" fill="#1a472a"/>
-            <text x="500" y="230" text-anchor="middle" font-size="11">Late Nights</text>
-          </g>
-          <g class="map-point" data-msg="Every moment I fell for you a little more">
-            <circle cx="700" cy="100" r="12" fill="#ecb939"/>
-            <text x="700" y="130" text-anchor="middle" font-size="11">Falling For You</text>
-          </g>
-          <text x="400" y="480" text-anchor="middle" font-size="13" fill="#5c4033" font-style="italic">Mischief managed ♥</text>
-        </svg>
-        <p id="map-message" class="map-message"></p>
-      </div>
-      <button class="btn-magic hidden" id="map-close">Mischief Managed</button>
-    </section>
+  <!-- ACT 3: DAILY PROPHET -->
+  <section id="act-prophet" class="act">
+    <p class="act-intro">The Daily Prophet has been talking about you...</p>
+    <article class="prophet-paper" id="prophet-paper">
+      <header class="prophet-header">
+        <h1>THE DAILY PROPHET</h1>
+        <p class="prophet-date" id="prophet-date"></p>
+      </header>
+      <div class="prophet-headlines" id="prophet-headlines"></div>
+      <div class="prophet-article" id="prophet-article"></div>
+      <p class="prophet-footer">* * * MISCHIEF MANAGED * * *</p>
+    </article>
+    <button class="btn-begin" id="btn-after-prophet">Continue →</button>
+  </section>
 
-    <!-- PATRONUS -->
-    <section id="patronus" class="panel">
-      <h2>Chamber of the Patronus</h2>
-      <p>Think of your happiest memory. Now watch the light appear.</p>
-      <canvas id="patronus-canvas"></canvas>
-      <div class="patronus-controls">
-        <button class="btn-magic" id="cast-patronus">Expecto Patronum ✨</button>
-      </div>
-      <div id="patronus-message" class="patronus-message hidden">
-        <p>A Patronus is fueled by pure, powerful love. Yours would outshine every star in the Great Hall.</p>
-        <p class="patronus-love">You are someone's happiest memory. Never forget that.</p>
-      </div>
-    </section>
+  <!-- ACT 4: LIVING PHOTOS -->
+  <section id="act-photos" class="act">
+    <p class="act-intro">In the wizarding world, photographs move. These ones hold my favorite memories of you.</p>
+    <div class="photo-wall" id="photo-wall"></div>
+    <p class="photo-note">* Add your real photos in <code>js/config.js</code> to make her lose her mind *</p>
+    <button class="btn-begin" id="btn-after-photos">There's more →</button>
+  </section>
 
-    <!-- PENSIEVE -->
-    <section id="pensieve" class="panel">
-      <h2>The Pensieve of Memories</h2>
-      <p>Touch a memory orb to relive a moment worth keeping forever.</p>
-      <div class="memory-orbs">
-        <div class="orb" data-memory="The first time I saw you smile — I understood what 'lumos' really means.">
-          <div class="orb-glow"></div>
-          <span>✨</span>
-          <p>First Smile</p>
-        </div>
-        <div class="orb" data-memory="Every movie night, every inside joke, every quiet moment — they're my favorite chapters.">
-          <div class="orb-glow"></div>
-          <span>🎬</span>
-          <p>Our Chapters</p>
-        </div>
-        <div class="orb" data-memory="You quoting Dumbledore at random times — that's when I knew you were the one.">
-          <div class="orb-glow"></div>
-          <span>📖</span>
-          <p>HP Quotes</p>
-        </div>
-        <div class="orb" data-memory="The way you get excited about magic, even in the ordinary world — that's real magic.">
-          <div class="orb-glow"></div>
-          <span>⚡</span>
-          <p>Your Magic</p>
-        </div>
-        <div class="orb" data-memory="All the adventures still to come. I can't wait for every single one.">
-          <div class="orb-glow"></div>
-          <span>🗺️</span>
-          <p>Future Adventures</p>
-        </div>
-      </div>
-      <div id="memory-display" class="memory-display hidden">
-        <p id="memory-text"></p>
-      </div>
-    </section>
+  <!-- ACT 5: THE WAND -->
+  <section id="act-wand" class="act">
+    <p class="act-intro">Every witch needs a wand. Draw a heart on the parchment below — if your magic is real, something will appear.</p>
+    <div class="wand-area">
+      <canvas id="wand-canvas"></canvas>
+      <p class="wand-status" id="wand-status">Draw with your finger or mouse...</p>
+    </div>
+    <button class="btn-ghost" id="btn-clear-wand">Clear & try again</button>
+    <div class="secret-reveal hidden" id="secret-reveal">
+      <p class="secret-label">The magic worked.</p>
+      <p class="secret-text" id="secret-text"></p>
+      <p class="secret-sign">— <span class="sender-name"></span></p>
+    </div>
+    <button class="btn-begin hidden" id="btn-after-wand">One last thing →</button>
+  </section>
 
-    <!-- FINALE -->
-    <section id="finale" class="panel">
-      <div class="finale-stars"></div>
-      <h2 class="always-title">Always.</h2>
-      <p class="always-context">After all this time?</p>
-      <p class="always-answer">Always.</p>
-      <div class="finale-letter">
-        <p>To the girl who grew up with Harry, Hermione, and Ron —</p>
-        <p>You don't need a Time-Turner to make me want more time with you.</p>
-        <p>You don't need Polyjuice Potion — I love exactly who you are.</p>
-        <p>You don't need the Elder Wand — your heart already has all the power it needs.</p>
-        <p class="finale-heart">This whole enchanted world exists because someone thinks you're the most magical person they've ever known.</p>
-        <p class="finale-sign">With all my magic,<br><span class="sender-name">Your Wizard</span> ♥</p>
+  <!-- ACT 6: THE TICKET -->
+  <section id="act-ticket" class="act">
+    <p class="act-intro">Every great story needs a next chapter. I wrote you a ticket.</p>
+    <div class="express-ticket" id="express-ticket">
+      <div class="ticket-stub">
+        <p class="ticket-brand">HOGWARTS EXPRESS</p>
+        <p class="ticket-platform">Platform <span id="ticket-platform"></span></p>
       </div>
-      <div id="snitch-game">
-        <p class="snitch-hint">Catch the Golden Snitch for one final surprise...</p>
-        <div id="snitch" class="snitch" role="button" tabindex="0" aria-label="Golden Snitch">⚡</div>
+      <div class="ticket-main">
+        <p class="ticket-label">PASSENGER</p>
+        <p class="ticket-name her-name" id="ticket-name"></p>
+        <p class="ticket-label">DESTINATION</p>
+        <p class="ticket-dest" id="ticket-dest"></p>
+        <p class="ticket-label">DATE</p>
+        <p class="ticket-date" id="ticket-date"></p>
+        <p class="ticket-house" id="ticket-house"></p>
+        <p class="ticket-note" id="ticket-note"></p>
+        <div class="ticket-barcode"></div>
       </div>
-      <div id="snitch-reward" class="snitch-reward hidden">
-        <h3>150 Points to <span class="her-name">My Favorite Witch</span>!</h3>
-        <p>You caught my heart a long time ago. This snitch is just for show. 💛</p>
-      </div>
-    </section>
-  </main>
+    </div>
+    <button class="btn-begin" id="btn-finale">Read the last page →</button>
+  </section>
 
-  <div id="wand-trail" aria-hidden="true"></div>
-  <audio id="ambient" loop preload="none">
-    <!-- Optional: user can add their own ambient track -->
-  </audio>
+  <!-- ACT 7: ALWAYS -->
+  <section id="act-always" class="act">
+    <canvas id="constellation" aria-hidden="true"></canvas>
+    <div class="always-content">
+      <p class="always-ask">"After all this time?"</p>
+      <h1 class="always-word">Always.</h1>
+      <p class="always-to">For <span class="her-name"></span> — the witch who made a muggle believe in magic.</p>
+      <p class="always-from">With everything I have,<br><span class="sender-name"></span> ♥</p>
+    </div>
+    <button class="btn-begin" id="btn-replay">Read it again</button>
+  </section>
+
+  <div id="particles" aria-hidden="true"></div>
+  <div class="page-curl" id="page-curl" aria-hidden="true"></div>
 
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
