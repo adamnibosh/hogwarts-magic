@@ -2,8 +2,8 @@
 //  MAKE THIS YOURS — this is what turns "cute" into "she cried"
 // ═══════════════════════════════════════════════════════════
 const CONFIG = {
-  herName: "My Favorite Witch",
-  yourName: "Your Wizard",
+  herName: "akasyaa",
+  yourName: "zikryy",
   herHouse: "gryffindor",
 
   chapters: [
