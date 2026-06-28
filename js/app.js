@@ -311,8 +311,15 @@
 
   document.querySelectorAll('.living-frame').forEach(frame => {
     frame.addEventListener('click', () => {
-      frame.classList.toggle('flipped');
-      if (frame.classList.contains('flipped')) burstParticles(5);
+      const isFlipped = frame.classList.toggle('flipped');
+      const caption = frame.querySelector('.frame-caption');
+      if (isFlipped) {
+        burstParticles(5);
+        if (caption) caption.textContent = 'tap again to see the photo';
+      } else if (caption) {
+        const idx = [...frame.parentElement.children].indexOf(frame);
+        caption.textContent = personalize(CONFIG.photos[idx].caption);
+      }
     });
   });
 

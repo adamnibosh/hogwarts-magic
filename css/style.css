@@ -398,15 +398,15 @@ code {
 
 .frame-inner {
   aspect-ratio: 4/5;
-  overflow: hidden;
-  background: linear-gradient(135deg, #2a2040, #1a1530);
   position: relative;
+  background: linear-gradient(135deg, #2a2040, #1a1530);
 }
 
-.frame-inner img {
+.frame-front img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   animation: photo-drift 8s ease-in-out infinite alternate;
 }
 
@@ -925,26 +925,50 @@ code {
   animation: fade-up 0.5s ease;
 }
 
-/* Photo flip */
+/* Photo tap — fade to secret message (no 3D mirror bug) */
 .living-frame { cursor: pointer; }
-.living-frame.flipped .frame-inner { transform: rotateY(180deg); }
-.frame-inner {
-  aspect-ratio: 4/5;
-  overflow: hidden;
-  transition: transform 0.6s ease;
-  transform-style: preserve-3d;
-  position: relative;
-}
-.frame-front, .frame-back {
-  position: absolute; inset: 0;
-  backface-visibility: hidden;
-}
+
+.frame-front,
 .frame-back {
-  transform: rotateY(180deg);
-  background: var(--parchment); color: var(--ink);
-  display: flex; align-items: center; justify-content: center;
-  padding: 1rem; text-align: center;
-  font-style: italic; font-size: 0.9rem;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.frame-front {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.frame-back {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+  background: var(--parchment);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  z-index: 1;
+}
+
+.living-frame.flipped .frame-front {
+  opacity: 0;
+  transform: scale(0.97);
+  pointer-events: none;
+}
+
+.living-frame.flipped .frame-back {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 }
 
 /* Frog cards */
