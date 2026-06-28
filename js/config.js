@@ -83,7 +83,7 @@ const CONFIG = {
   // photo1.jpg, photo2.HEIC (or .jpg), photo3.jpg
   photos: [
     { src: "images/photo1.jpg", caption: "Us — a moment worth framing forever", secret: "I look at this more than I'd admit." },
-    { src: "images/photo2.jpg", caption: "The smile that started everything", secret: "This is when I knew I was in trouble." },
+    { src: "images/photo2.jpg", caption: "The smile that started everything", secret: "Tengah panas pun layan je sayang baby ni" },
     { src: "images/photo3.jpg", caption: "My favorite chapter so far", secret: "My first couple date is with you sayang" },
   ],
 
