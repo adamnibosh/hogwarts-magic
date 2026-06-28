@@ -11,44 +11,89 @@
 </head>
 <body>
 
-  <!-- ACT 1: THE OPENING -->
-  <section id="act-opening" class="act active">
+  <div id="candles" aria-hidden="true"></div>
+  <div id="wand-trail" aria-hidden="true"></div>
+  <div id="particles" aria-hidden="true"></div>
+  <div id="petals" aria-hidden="true"></div>
+  <div id="snitch-container" aria-hidden="true"></div>
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <!-- ACT 0: OWL DELIVERY -->
+  <section id="act-owl" class="act active">
+    <div class="void"></div>
+    <p class="owl-whisper">Something is arriving...</p>
+    <div class="owl-scene" id="owl-scene">
+      <div class="owl" id="owl">🦉</div>
+      <div class="owl-scroll hidden" id="owl-scroll">
+        <p>For <span class="her-name"></span></p>
+        <p class="scroll-from">— a letter from <span class="sender-name"></span></p>
+      </div>
+    </div>
+    <button class="btn-begin hidden" id="btn-accept-scroll">Accept the scroll →</button>
+  </section>
+
+  <!-- ACT 1: OPENING -->
+  <section id="act-opening" class="act">
     <div class="void"></div>
     <div class="opening-text" id="opening-lines">
       <p class="line hidden" data-delay="0">Some stories end at Chapter Seven.</p>
-      <p class="line hidden" data-delay="2800">The Boy Who Lived. The Battle of Hogwarts. The train pulling away.</p>
-      <p class="line hidden" data-delay="5800">But the best stories?</p>
-      <p class="line hidden" data-delay="7800">They keep going.</p>
-      <p class="line line-hero hidden" data-delay="10000">This one is about <span class="her-name">you</span>.</p>
+      <p class="line hidden" data-delay="2400">The Boy Who Lived. The Battle of Hogwarts. The train pulling away.</p>
+      <p class="line hidden" data-delay="5000">But the best stories?</p>
+      <p class="line hidden" data-delay="6600">They keep going.</p>
+      <p class="line line-hero hidden" data-delay="8600">This one is about <span class="her-name">you</span>.</p>
     </div>
     <button class="btn-begin hidden" id="btn-begin">Open the Book →</button>
   </section>
 
-  <!-- ACT 2: THE BOOK -->
+  <!-- ACT 2: BOOK -->
   <section id="act-book" class="act">
     <div class="book-progress">
       <span id="chapter-indicator">Chapter 1 of 5</span>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <p class="snitch-counter">Golden Snitches caught: <span id="snitch-count">0</span>/3 ✨</p>
     </div>
-
     <div class="book-stage">
       <div class="book-page" id="book-page">
         <p class="page-chapter" id="page-chapter"></p>
         <h2 class="page-title" id="page-title"></h2>
         <div class="page-body" id="page-body"></div>
-        <p class="page-turn-hint">tap to turn the page →</p>
+        <div class="chapter-gift hidden" id="chapter-gift">
+          <span class="gift-icon">💌</span>
+          <p id="gift-text"></p>
+        </div>
+        <p class="page-turn-hint">tap the page to turn →</p>
       </div>
     </div>
-
     <div class="book-nav">
       <button class="btn-ghost" id="btn-prev" disabled>← Back</button>
       <button class="btn-ghost" id="btn-next">Next →</button>
     </div>
   </section>
 
-  <!-- ACT 3: DAILY PROPHET -->
+  <!-- ACT 3: AMORTENTIA -->
+  <section id="act-amortentia" class="act">
+    <p class="act-intro">Amortentia is the strongest love potion in the world. It smells like what your heart wants most. I wondered what you'd smell like to me...</p>
+    <div class="vials-row" id="vials-row"></div>
+    <p class="amortentia-reveal hidden" id="amortentia-reveal"></p>
+    <button class="btn-begin hidden" id="btn-after-amortentia">Step toward the mirror →</button>
+  </section>
+
+  <!-- ACT 4: MIRROR OF ERISED -->
+  <section id="act-mirror" class="act">
+    <p class="act-intro" id="mirror-prompt">Tap the mirror to see your heart's deepest desire...</p>
+    <div class="mirror-frame" id="mirror-frame" role="button" tabindex="0" aria-label="Mirror of Erised">
+      <div class="mirror-glass" id="mirror-glass">
+        <p class="mirror-mist">?</p>
+        <p class="mirror-vision hidden" id="mirror-vision"></p>
+      </div>
+      <p class="mirror-caption">Mirror of Erised</p>
+    </div>
+    <button class="btn-begin hidden" id="btn-after-mirror">Continue →</button>
+  </section>
+
+  <!-- ACT 5: PROPHET -->
   <section id="act-prophet" class="act">
-    <p class="act-intro">The Daily Prophet has been talking about you...</p>
+    <p class="act-intro">The Daily Prophet has been talking about you... <em>(tap any headline)</em></p>
     <article class="prophet-paper" id="prophet-paper">
       <header class="prophet-header">
         <h1>THE DAILY PROPHET</h1>
@@ -56,25 +101,40 @@
       </header>
       <div class="prophet-headlines" id="prophet-headlines"></div>
       <div class="prophet-article" id="prophet-article"></div>
+      <p class="headline-secret hidden" id="headline-secret"></p>
       <p class="prophet-footer">* * * MISCHIEF MANAGED * * *</p>
     </article>
-    <button class="btn-begin" id="btn-after-prophet">Continue →</button>
+    <button class="btn-begin" id="btn-after-prophet">See our memories →</button>
   </section>
 
-  <!-- ACT 4: LIVING PHOTOS -->
+  <!-- ACT 6: PHOTOS -->
   <section id="act-photos" class="act">
-    <p class="act-intro">In the wizarding world, photographs move. These ones hold my favorite memories of you.</p>
+    <p class="act-intro">Wizard photographs move when you touch them. Tap each frame — there's something on the back.</p>
     <div class="photo-wall" id="photo-wall"></div>
-    <p class="photo-note">* Add your real photos in <code>js/config.js</code> to make her lose her mind *</p>
-    <button class="btn-begin" id="btn-after-photos">There's more →</button>
+    <button class="btn-begin" id="btn-after-photos">Open your gifts →</button>
   </section>
 
-  <!-- ACT 5: THE WAND -->
+  <!-- ACT 7: CHOCOLATE FROGS + HOWLER -->
+  <section id="act-gifts" class="act">
+    <p class="act-intro">I packed you a care package from Hogsmeade. Flip the cards. Open the Howler. (Don't be scared.)</p>
+    <div class="frog-cards" id="frog-cards"></div>
+    <div class="howler-wrap">
+      <div class="howler sealed" id="howler" role="button" tabindex="0" aria-label="Open Howler">
+        <span class="howler-label">🔴 HOWLER — TAP TO OPEN</span>
+        <p class="howler-shout hidden" id="howler-shout"></p>
+        <p class="howler-quiet hidden" id="howler-quiet"></p>
+      </div>
+    </div>
+    <button class="btn-begin hidden" id="btn-after-gifts">Cast a spell →</button>
+  </section>
+
+  <!-- ACT 8: WAND -->
   <section id="act-wand" class="act">
-    <p class="act-intro">Every witch needs a wand. Draw a heart on the parchment below — if your magic is real, something will appear.</p>
+    <p class="act-intro">Hold your finger down anywhere on the parchment first — <strong>Lumos</strong> — then draw a heart.</p>
     <div class="wand-area">
       <canvas id="wand-canvas"></canvas>
-      <p class="wand-status" id="wand-status">Draw with your finger or mouse...</p>
+      <div class="lumos-glow hidden" id="lumos-glow"></div>
+      <p class="wand-status" id="wand-status">Hold to cast Lumos, then draw a heart...</p>
     </div>
     <button class="btn-ghost" id="btn-clear-wand">Clear & try again</button>
     <div class="secret-reveal hidden" id="secret-reveal">
@@ -82,12 +142,23 @@
       <p class="secret-text" id="secret-text"></p>
       <p class="secret-sign">— <span class="sender-name"></span></p>
     </div>
-    <button class="btn-begin hidden" id="btn-after-wand">One last thing →</button>
+    <button class="btn-begin hidden" id="btn-after-wand">Catch the Snitch →</button>
   </section>
 
-  <!-- ACT 6: THE TICKET -->
+  <!-- ACT 9: SNITCH GAME -->
+  <section id="act-snitch" class="act">
+    <p class="act-intro">A Golden Snitch is loose! Tap it <strong>5 times</strong> before it vanishes. (I've been told you're fast.)</p>
+    <div class="snitch-arena" id="snitch-arena">
+      <p class="snitch-score">Caught: <span id="snitch-game-score">0</span> / 5</p>
+      <div class="flying-snitch" id="flying-snitch" role="button" tabindex="0">⚡</div>
+      <p class="snitch-msg" id="snitch-msg"></p>
+    </div>
+    <button class="btn-begin hidden" id="btn-after-snitch">Claim your ticket →</button>
+  </section>
+
+  <!-- ACT 10: TICKET -->
   <section id="act-ticket" class="act">
-    <p class="act-intro">Every great story needs a next chapter. I wrote you a ticket.</p>
+    <p class="act-intro">Every great story needs a next chapter. Stamp your ticket to make it official.</p>
     <div class="express-ticket" id="express-ticket">
       <div class="ticket-stub">
         <p class="ticket-brand">HOGWARTS EXPRESS</p>
@@ -102,13 +173,17 @@
         <p class="ticket-date" id="ticket-date"></p>
         <p class="ticket-house" id="ticket-house"></p>
         <p class="ticket-note" id="ticket-note"></p>
+        <div class="ticket-stamp-area" id="ticket-stamp-area">
+          <button class="btn-stamp" id="btn-stamp">Stamp here ♥</button>
+          <div class="ticket-stamp hidden" id="ticket-stamp">APPROVED</div>
+        </div>
         <div class="ticket-barcode"></div>
       </div>
     </div>
-    <button class="btn-begin" id="btn-finale">Read the last page →</button>
+    <button class="btn-begin hidden" id="btn-finale">Read the last page →</button>
   </section>
 
-  <!-- ACT 7: ALWAYS -->
+  <!-- ACT 11: ALWAYS -->
   <section id="act-always" class="act">
     <canvas id="constellation" aria-hidden="true"></canvas>
     <div class="always-content">
@@ -116,12 +191,12 @@
       <h1 class="always-word">Always.</h1>
       <p class="always-to">For <span class="her-name"></span> — the witch who made a muggle believe in magic.</p>
       <p class="always-from">With everything I have,<br><span class="sender-name"></span> ♥</p>
+      <p class="finale-note" id="finale-note"></p>
+      <button class="btn-hug" id="btn-hug">Send a hug 🤗</button>
+      <p class="hug-msg hidden" id="hug-msg"></p>
     </div>
-    <button class="btn-begin" id="btn-replay">Read it again</button>
+    <button class="btn-begin" id="btn-replay">Experience it all again</button>
   </section>
-
-  <div id="particles" aria-hidden="true"></div>
-  <div class="page-curl" id="page-curl" aria-hidden="true"></div>
 
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
