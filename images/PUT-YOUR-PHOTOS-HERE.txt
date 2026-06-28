@@ -1,0 +1,9 @@
+Drop your 3 photos in THIS folder:
+
+  hogwarts-magic/images/photo1.jpg
+  hogwarts-magic/images/photo2.jpg
+  hogwarts-magic/images/photo3.jpg
+
+You can use .jpg or .png — if you use .png, change the names in js/config.js to match.
+
+After adding photos, push to GitHub (or ask the AI to push) and they will appear on the live site.
